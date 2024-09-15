@@ -17,3 +17,5 @@ def plot_error_linlin(x0, err):
     plt.xlabel("$Значение\;аргумента$")
     plt.ylabel("$Относительная\;погрешность$")
     plt.show()
+
+print(np.inf/np.inf)

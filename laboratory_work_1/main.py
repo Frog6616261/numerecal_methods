@@ -1,34 +1,23 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import my_plot as my_plt
+import my_pow_funcs as pf
 
 
 Eps = np.finfo(np.double).eps
 
 def relative_error(x0, x):
-    err = np.abs(x0- x) / abs(x0)
+    err = np.abs(x0 - x) / abs(x0)
 
     return err
-
-
-def my_pow(x, numb_pow):
-    return np.pow(x, numb_pow) * (1 + numb_pow*Eps) + Eps
-
-def f_sqrt_sqr(x, iter = 52):
-    for k in range(iter): x = my_pow(x, 0.5)
-    for k in range(iter): x = my_pow(x, 2)
-
-    return x 
-
-def f_sqrt_sqr_err(x, iter = 52):
-    for k in range(iter): x = np.pow(x, 0.5)
-    for k in range(iter): x = np.pow(x, 2)
-
-    return x       
+     
 
 # create all data
 x0 = np.logspace(-4, 4, dtype= np.double)
-x = f_sqrt_sqr(x0)
+
+#x = pf.many_sqrt_pow_by_log(x0, 52, 2)
+x = pf.many_pow(x0, 52, 0.5)
+x = pf.many_pow(x, 52, 2)
 err = relative_error(x0, x)
 
 # plotting results
