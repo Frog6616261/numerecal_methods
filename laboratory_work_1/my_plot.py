@@ -18,4 +18,18 @@ def plot_error_linlin(x0, err):
     plt.ylabel("$Относительная\;погрешность$")
     plt.show()
 
-print(np.inf/np.inf)
+
+def plot_LSE(x_LSE, LSE):
+    
+    plt.plot(x_LSE, LSE)
+    plt.xlabel("$x$")
+    plt.ylabel("$y$")
+    plt.show()
+
+def plot_LSE_der(x_LSE_der, LSE_der):
+    
+    plt.plot(x_LSE_der, LSE_der)
+    plt.xlabel("$x$")
+    plt.ylabel("$y$")
+    plt.show()
+
