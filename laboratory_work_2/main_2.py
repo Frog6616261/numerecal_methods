@@ -7,84 +7,39 @@ import lab_funcs_disp as lfd
 import my_plot as mplt
 
 
-# Solving sum
 
-K = 7
+x = lfd.samples(100000)
+eps0 = np.finfo(np.double).eps
+n = float(len(x))
+mean = lfd.get_mean()
+delta = lfd.get_delta()
+variance = lfd.exact_variance()
 
-print(np.sort([-5, -3, -4, -1, -2, 1,5,6,8]))
+theor_1 = 8*eps0*mean*delta**(0.5)
+theor_2 = 4*eps0*mean**2
 
-N = 1000
-correct_sin_sum = mf.get_correct_sin_sum(N)
-sin_perm_data = mf.get_sin_perm_samples(N)
-sin_sort_data = mf.get_sin_sort_samples(N)
-sin_abs_sort_data = mf.get_sin_abs_sort_samples(N)
+x_oneline_test=[1/2,4/7,3/5,11/19,5/19]
+d1=lfd.oneline_first_var(x_oneline_test)
+d2=lfd.online_second_var(x_oneline_test)
+print('Сравнение однопроходных формул для первой и второй оценки дисперсии: разность получаемых значений',np.abs(d1-d2))
 
-sum_sin_perm = mf.Kahan_sum(sin_perm_data)
-sum_sin_sort = mf.Kahan_sum(sin_sort_data)
-sum_abs_sin_sort = mf.Kahan_sum(sin_abs_sort_data)
-
-print("Relative sum error to Kahan permut sin data: ",
-       lf.relative_error(correct_sin_sum, sum_sin_perm))
-print("Relative sum error to Kahan sort sin data: ",
-       lf.relative_error(correct_sin_sum, sum_sin_sort))
-print("Relative sum error to Kahan abs sort sin data: ",
-       lf.relative_error(correct_sin_sum, sum_abs_sin_sort))
-
-
-x_permutated = lf.samples(K)
-x_sort_up = np.sort(x_permutated)
-x_sign_permutated = mf.get_any_sign_samples(K)
-x_sign_sort = np.sort(x_sign_permutated)
-x_sign_sort_abs = mf.get_any_sign_sort_samples(K)
-
-permutated_sign_sum = mf.Kahan_sum(x_sign_permutated)
-direct_sign_sum = mf.Kahan_sum(x_sign_sort)
-direct_sign_sum_abs = mf.Kahan_sum(x_sign_sort_abs)
-
-current_sign_sum = mf.exact_sign_sum()
-
-print(mf.Kahan_sum(x_sort_up), mf.Kahan_sum(x_permutated))
+print("Размер выборки:", len(x))
+print("Среднее значение:", lfd.exact_mean())
+print("Оценка дисперсии:", lfd.exact_variance())
+print("Ошибка среднего для встроенной функции:", lfd.relative_error(mean,np.mean(x)))
+print("Ошибка дисперсии для встроенной функции:", lfd.relative_error(variance,np.var(x)))
 
 
+print("Ошибка среднего для последовательного суммирования:", lfd.relative_error(mean,lfd.direct_mean(x)))
 
-print("суммирования для знаков:",
-       permutated_sign_sum)
-print("суммирования для знаков сортированных:",
-       direct_sign_sum)
-print("суммирования для знаков сортированных абсолютно:",
-       direct_sign_sum_abs)
+print("Ошибка второй оценки дисперсии для последовательного суммирования:",lfd.relative_error(variance,lfd.direct_second_var(x)))
+print("Ошибка второй оценки дисперсии для однопроходного суммирования:",lfd.relative_error(variance,lfd.online_second_var(x)))
 
 
-# 1
-# при суммированиии постепенно , постепенно накапливается погрешность
-
-# 2
-# Алгоритм на каждом шаге учитывает поггрешность, после в конце ее выдает
-
-# 3
-# Да получим
-
-# 4
-# погрешность будет меняться, для абс погрешность сранима с машинной, для просто сорт плохая погрешность
+print("Ошибка первой оценки дисперсии для последовательного суммирования:",lfd.relative_error(variance,lfd.direct_first_var(x)))
+print("Ошибка первой оценки дисперсии для однопроходного суммирования:",lfd.relative_error(variance,lfd.oneline_first_var(x)))
 
 
-# Solving dispersion and matsr
+print("Теоретическая оценка ошибки дисперсии (по первой формуле):",theor_1)
+print("Теоретическая оценка ошибки дисперсии (по второй формуле):",theor_2)
 
-N = np.array([i for i in range(2, 1000)])
-x = lfd.array_samples(N)
-disp = lfd.exact_variance()
-
-disp_one_sqrt_f = lfd.direct_first_var(x)
-disp_one_sqrt_s = lfd.direct_second_var(x)
-disp_two_sqrt = lfd.online_second_var(x)
-
-
-
-mplt.plot_err_f_and_s(disp_one_sqrt_f, disp_one_sqrt_s, N)
-
-
-# 5
-# 
-
-# 6
-#

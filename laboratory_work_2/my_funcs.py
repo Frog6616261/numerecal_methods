@@ -3,6 +3,10 @@ import matplotlib.pyplot as plt
 
 base = 10
 
+def get_N_array(N_max):
+    samples = np.concatenate([np.full(1, k) for k in range(1, N_max+1)])
+    return samples
+
 def get_correct_sin_sum(N):
     return (0.5)*(np.sin(N) - (np.tan(0.5))**(-1)*np.cos(N) + (np.tan(0.5))**(-1))
 
