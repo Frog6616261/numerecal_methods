@@ -13,7 +13,7 @@ def get_delta():
 
 def relative_error(x0, x):
     """Погрешность x при точном значении x0"""
-    return np.abs(x0-x)/np.abs(x)
+    return np.abs(x0-x)/np.abs(x0)
 
 def Kahan_sum(x):
     s=0.0 # частичная сумма

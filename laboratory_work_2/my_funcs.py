@@ -1,5 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import sys
+import math as mt
 
 base = 10
 
@@ -74,3 +76,55 @@ def get_any_sign_sort_samples(K):
 def exact_sign_sum():
     """Точное значение суммы всех элементов."""
     return 0.0
+
+######################################################### exp Task
+
+def exp_evaluation(x, N=None):
+  err = 1
+  nk = 1
+  acc = np.ones(N+1, dtype=float)
+  acc[0] = x / (1-np.abs(x))
+  for k in range(1, N+1):
+    err = err * x
+    acc[k] = err / np.abs(1 - np.abs(x) / k) / nk 
+    for i in range (1, k+1):
+      acc[k] = acc[k] / k
+    nk = nk + 1
+  return acc
+
+def how_n_to_complete_exp(eps, x):
+  eps0=np.finfo(np.double).eps
+  N=1
+  eps_now=N*(N+3)*x*eps0/2 + exp_evaluation(x, N)[-1]
+  num=1
+  hvost=exp_evaluation(x, num)[-1]
+  summ_eps=num*(num+3)*x*eps0/2
+
+  while hvost>=summ_eps:
+    num=num+1
+    hvost=exp_evaluation(x, num)[-1]
+    summ_eps=num*(num+3)*x*eps0/2
+
+  max_eps=summ_eps+hvost
+  if eps>max_eps:
+    while eps_now>=eps:
+        N=N+1
+        eps_now=N*(N+3)*x*eps0/2 + exp_evaluation(x, N)[-1]
+    return N
+  else:
+     return 'Pososi, Epsilone is small'
+  
+def find_N(x, max_N = 1000):
+    eps0=np.finfo(np.double).eps
+    min_delta = sys.float_info.max
+    result_N = 1
+
+    for N in range(1, max_N):
+        err_sum = (N * (N + 3) * x * eps0) / 2
+        err_series = (np.pow(x, N + 1)) / (mt.factorial(N)*(N - x))
+        cur_delta = np.abs(err_sum - err_series)
+        if cur_delta <= min_delta:
+           min_delta = cur_delta
+           result_N = N
+    
+    return result_N
